@@ -16,7 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        <title>Stripe Payment Demo</title>
+      </head>
+      <body className={inter.className}>
+        <div className="h-screen w-screen flex justify-center items-center bg-slate-600">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
