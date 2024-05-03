@@ -1,21 +1,16 @@
 "use client";
-import getStripe from "@/util/get-stripejs";
 import {
   AddressElement,
-  Elements,
-  EmbeddedCheckout,
-  EmbeddedCheckoutProvider,
-  ExpressCheckoutElement,
   LinkAuthenticationElement,
   PaymentElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import React, { useCallback, useEffect, useState } from "react";
-import { productData } from "@/data/products";
-import { AddressForm } from "@/components/address-form";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
 
 export const CheckoutForm = () => {
+  // The useStripe hook returns a reference to the Stripe instance passed to the Elements provider.
   const stripe = useStripe();
   const elements = useElements();
 
@@ -26,6 +21,8 @@ export const CheckoutForm = () => {
     e.preventDefault();
 
     if (!stripe || !elements) {
+      // Stripe.js hasn't yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
@@ -34,10 +31,10 @@ export const CheckoutForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/custom-checkout/success",
+        return_url: `${window.location.hostname}/custom-checkout/success`,
       },
     });
-    console.log(error);
+
     if (error.type === "card_error" || error.type === "validation_error") {
       setMessage(error.type);
     } else {
@@ -52,13 +49,7 @@ export const CheckoutForm = () => {
       onSubmit={onConfirmHandler}
       className="flex  w-[600px] flex-col gap-4"
     >
-      {/* <ExpressCheckoutElement
-        onConfirm={() => {}}
-        options={{
-          wallets: { applePay: "always" },
-          buttonTheme: { applePay: "black" },
-        }}
-      /> */}
+      {/* Elements to collect details */}
       <LinkAuthenticationElement />
       <PaymentElement
         options={{
@@ -72,8 +63,9 @@ export const CheckoutForm = () => {
         disabled={isLoading || !stripe || !elements}
         className="w-full bg-blue-600 p-2 rounded-md text-white text-pretty"
       >
-        {isLoading ? "Loading" : "Pay Now"}
+        {isLoading ? "Loading...." : "Pay Now"}
       </button>
+      {/* Displaying error message if available */}
       {message && (
         <div className="bg-red-200  text-red-800 px-4 py-2 rounded-sm">
           {message}

@@ -9,6 +9,7 @@ export const ShoppingCart = () => {
   const [products, setProducts] = useState(productData);
   const router = useRouter();
 
+  // Function to Update Quantity of the product
   const updateQuantity = (id: string, type: "increment" | "decrement"): any => {
     if (type === "increment") {
       //   setQuantity((prev) => prev + 1);
@@ -30,9 +31,10 @@ export const ShoppingCart = () => {
     }
   };
 
+  // Handler to checkout using stripe-hosted page
   const checkoutHandler = async () => {
     try {
-      const res = await fetch("/api/create-checkout-session", {
+      const res = await fetch("/api/create-hosted-checkout-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,9 +48,10 @@ export const ShoppingCart = () => {
     }
   };
 
+  // Handler to checkout using embedded way
   const embeddedCheckoutHandler = async () => {
     try {
-      const res = await fetch("/api/create-checkout-session", {
+      const res = await fetch("/api/create-embedded-checkout-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,12 +60,13 @@ export const ShoppingCart = () => {
       });
       const data = await res.json();
       localStorage.setItem("client_secret", data.clientSecret);
-      router.push('/embedded-checkout');
+      router.push("/embedded-checkout");
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Handler to checkout custome flow
   const customeCheckoutHandler = async () => {
     try {
       const res = await fetch("/api/create-payment-intent", {
@@ -73,6 +77,9 @@ export const ShoppingCart = () => {
         body: JSON.stringify({ products: products }),
       });
       const data = await res.json();
+
+      // store the checkedout products and client-secret for custom-checkout page
+  
       localStorage.setItem("client-secret", data.clientSecret);
       localStorage.setItem(
         "checkout-items",

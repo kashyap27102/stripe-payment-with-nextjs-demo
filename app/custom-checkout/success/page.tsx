@@ -1,19 +1,25 @@
 "use client";
 import { useStripe } from "@stripe/react-stripe-js";
+import { Metadata } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+export const metaData: Metadata = {
+  title:'Payment Success',
+  description:"Payment Success page"
+};
+
 const page = () => {
-  const searchParams = useSearchParams();
-  const client_secret = searchParams.get("payment_intent_client_secret");
-
   const stripe = useStripe();
+  const searchParams = useSearchParams();
   const [message, setMessage] = useState("");
-
+  
+  const client_secret = searchParams.get("payment_intent_client_secret");
+  
   useEffect(() => {
     if (!stripe || !client_secret) return;
-
+  
     stripe.retrievePaymentIntent(client_secret).then(({ paymentIntent }) => {
       switch (paymentIntent!.status) {
         case "succeeded":

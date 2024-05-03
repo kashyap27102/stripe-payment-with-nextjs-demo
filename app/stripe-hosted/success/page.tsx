@@ -1,7 +1,14 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import { Metadata } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+
+export const metaData: Metadata = {
+  title: "Payment Success",
+  description: "Payment Success page",
+};
+
 
 const page = () => {
   const [session, setSession] = useState<any>();
@@ -12,7 +19,7 @@ const page = () => {
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        const res = await fetch("/api/checkout-session?session_id=" + id);
+        const res = await fetch("/api/session-status?session_id=" + id);
         const data = await res.json();
         console.log(data);
         setSession(data.session);
