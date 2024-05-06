@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -11,7 +10,7 @@ export const POST = async (req: NextRequest) => {
   // A list of items the customer is purchasing. Use this parameter to pass one-time or recurring
   const items = products.map((product: any) => {
     return {
-      price: product.id,
+      price: product.id, // ex. price_1P8b4lSDd04VsX80J0LFjjL9 (you will get from stripe)
       quantity: product.quantity,
     };
   });

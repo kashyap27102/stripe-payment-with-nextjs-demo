@@ -10,7 +10,7 @@ export const metaData: Metadata = {
   description:"Payment Success page"
 };
 
-const page = () => {
+const Page = () => {
   const stripe = useStripe();
   const searchParams = useSearchParams();
   const [message, setMessage] = useState("");
@@ -75,4 +75,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

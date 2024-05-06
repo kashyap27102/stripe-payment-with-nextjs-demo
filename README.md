@@ -90,7 +90,7 @@ You can checkout to Payment by any of this three option among them.
 
 ![Home Page](./public/home-page.png)
 
-Let's see steps to implement methods,
+Let's see steps to implement various methods
 
 ## 1) Redirect to Stripe-hosted payment page
 
@@ -98,6 +98,7 @@ Let's see steps to implement methods,
 
 - Add an endpoint on your `server` that creates a Checkout Session
 - Define a product to sell
+  - First of all add product into stripe using api or [manually](https://dashboard.stripe.com/test/products?active=true&create=product&source=product_list)
 - Checkout has three modes: `payment`, `subscription`, or `setup`. Use `payment` mode for one-time purchases.
 - Supply success and cancel URLs : Specify URLs for success and cancel pages—make sure they’re publicly accessible so Stripe can redirect customers to them.
 
@@ -108,6 +109,8 @@ Let's see steps to implement methods,
 
 see the full code below directory
 
+- client
+
 ```
 app
 └── stripe-hosted
@@ -117,9 +120,21 @@ app
         └── page.tsx
 ```
 
+- server
+
+```
+app
+├── api
+│   ├── create-hosted-checkout-session
+│   │   └── route.ts
+│   └── session-status
+│       └── route.ts
+
+```
+
 ## 2) Embedded Stripe Checkout Page
 
-Embed a pre-built payment form on your site using Stripe Checkout
+Embedded a pre-built payment form on your site using Stripe Checkout
 
 #### Create a Checkout Session `server-side`
 
@@ -156,6 +171,8 @@ Handle the result according to the session status as follows:
 
 see the full code below directory
 
+- client
+
 ```
 app
 ├── embedded-checkout
@@ -164,11 +181,22 @@ app
 │       └── page.tsx
 ```
 
-## 3) Custome Checkout Flow
+- server
+
+```
+app
+`├── api
+│   ├── create-embedded-checkout-session
+│   │   └── route.ts
+│   └── session-status
+│       └── route.ts
+````
+
+## 3) Custom Checkout Flow
 
 Build a custom payments integration by embedding UI components on your site, using [Stripe Elements.](https://docs.stripe.com/payments/elements)
 
-#### Create PaymentInent `server-side`
+#### Create PaymentIntent `server-side`
 
 - Create end-point at server side to create paymentIntent
 - Stripe uses your payment methods settings to display the payment methods you have enabled.
@@ -185,3 +213,29 @@ Build a custom payments integration by embedding UI components on your site, usi
 
 - Use `stripe.confirmPayment` to complete the payment using details from the Payment Element.
 - Provide a `return_url` to this function to indicate where Stripe should redirect the user after they complete the payment.
+
+see the full code below directory
+
+- client
+
+```
+app
+├── custom-checkout
+│   ├── canceled
+│   │   └── page.tsx
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── success
+│       └── page.tsx
+```
+
+- server
+
+```
+app
+├── api
+│   ├── create-payment-intent
+│   │   └── route.ts
+│   └── session-status
+│       └── route.ts
+```

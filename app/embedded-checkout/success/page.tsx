@@ -9,7 +9,7 @@ export const metaData: Metadata = {
   description:"Payment Success page"
 };
 
-const page = () => {
+const Page = () => {
   const [session, setSession] = useState<any>();
   const searchParams = useSearchParams();
   const id = searchParams.get("session_id");
@@ -65,4 +65,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

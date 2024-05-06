@@ -6,10 +6,8 @@ export const POST = async (req: NextRequest) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const { products } = await req.json();
 
-  const domainURL = req.headers.get("origin");
-
   const amount = Number(calculateTotalAmount(products) + "00");
-  console.log(amount);
+  
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,

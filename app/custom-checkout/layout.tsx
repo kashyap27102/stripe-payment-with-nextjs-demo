@@ -6,6 +6,7 @@ import React from "react";
 const stripePromise = getStripe();
 
 const layout = ({ children }: { children: React.ReactNode }) => {
+  
   const clientSecret = localStorage.getItem("client-secret")!;
 
   return (
