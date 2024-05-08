@@ -80,6 +80,8 @@ Here in this project i have implemented three ways to integrate stripe checkout 
 
    `STRIPE_SECRET_KEY`
 
+   `DOMAIN` : http://localhost:3000
+
 - [Click here to get Keys.](https://dashboard.stripe.com/test/apikeys)
 
 4. To start a project run command `npm run dev`
