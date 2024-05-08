@@ -1,21 +1,10 @@
 
-import { Metadata } from "next";
 import React from "react";
 
-export const metaData: Metadata = {
-  title:'Payment Cancelled',
-  description:"Payment Cancelled page"
-};
-
-const page = () => {
+export default function Page () {
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100">
-      <div>
-        <title>Payment Cancelled</title>
-        <meta name="description" content="Payment Cancelled Page" />
-        <link rel="icon" href="/favicon.ico" />
-      </div>
-
+      
       <div className="max-w-lg p-8 bg-white rounded-lg shadow-md text-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -47,4 +36,4 @@ const page = () => {
   );
 };
 
-export default page;
+

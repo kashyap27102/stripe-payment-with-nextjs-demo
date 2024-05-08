@@ -1,4 +1,4 @@
-"use client";
+
 import {
   AddressElement,
   LinkAuthenticationElement,
@@ -7,15 +7,49 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 export const CheckoutForm = () => {
   // The useStripe hook returns a reference to the Stripe instance passed to the Elements provider.
   const stripe = useStripe();
   const elements = useElements();
-
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (!stripe) {
+      return;
+    }
+
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
+    );
+
+    if (!clientSecret) {
+      return;
+    }
+
+    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      switch (paymentIntent!.status) {
+        case "succeeded":
+          setMessage("Your payment is processing.");
+          // router.push('/custom-checkout/success')
+          break;
+        case "processing":
+          setMessage("Your payment is processing.");
+          break;
+        case "requires_payment_method":
+          setMessage("Your payment was not successful, please try again.");
+          break;
+        default:
+          setMessage("Something went wrong.");
+          break;
+      }
+    });
+  }, [stripe]);
+
 
   const onConfirmHandler = async (e: any) => {
     e.preventDefault();
@@ -31,16 +65,17 @@ export const CheckoutForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.hostname}/custom-checkout/success`,
+        return_url: `${process.env.DOMAIN}/custom-checkout`,
       },
     });
-
+    console.log(error);
+    
     if (error.type === "card_error" || error.type === "validation_error") {
       setMessage(error.type);
     } else {
       setMessage("An unexpexted error occurred.");
     }
-
+    
     setIsLoading(false);
   };
 

@@ -59,7 +59,9 @@ export const ShoppingCart = () => {
         body: JSON.stringify({ products: products, mode: "embedded" }),
       });
       const data = await res.json();
+      if (typeof window !== undefined) {
       localStorage.setItem("client_secret", data.clientSecret);
+      }
       router.push("/embedded-checkout");
     } catch (error) {
       console.log(error);
@@ -68,30 +70,15 @@ export const ShoppingCart = () => {
 
   // Handler to checkout custome flow
   const customeCheckoutHandler = async () => {
-    try {
-      const res = await fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ products: products }),
-      });
-      const data = await res.json();
-
-      // store the checkedout products and client-secret for custom-checkout page
-  
-      localStorage.setItem("client-secret", data.clientSecret);
-      localStorage.setItem(
-        "checkout-items",
-        JSON.stringify({
-          products: products,
-          totalAmount: calculateTotalAmount(products),
-        })
-      );
-      router.push("/custom-checkout");
-    } catch (error) {
-      console.log(error);
-    }
+    if (typeof window !== undefined) {
+    localStorage.setItem(
+      "checkout-items",
+      JSON.stringify({
+        products: products,
+        totalAmount: calculateTotalAmount(products),
+      })
+    );}
+    router.push("/custom-checkout");
   };
 
   return (

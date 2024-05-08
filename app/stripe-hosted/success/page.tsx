@@ -1,14 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Metadata } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
-export const metaData: Metadata = {
-  title: "Payment Success",
-  description: "Payment Success page",
-};
-
 
 const Page = () => {
   const [session, setSession] = useState<any>();

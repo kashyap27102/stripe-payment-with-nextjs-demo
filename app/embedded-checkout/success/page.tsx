@@ -1,13 +1,7 @@
 "use client";
-import { Metadata } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
-export const metaData: Metadata = {
-  title:'Payment Success',
-  description:"Payment Success page"
-};
 
 const Page = () => {
   const [session, setSession] = useState<any>();
@@ -29,8 +23,8 @@ const Page = () => {
   }, [id]);
 
   return (
-    session?.status === "complete" && (
-      <div className="flex flex-col items-center justify-center bg-gray-100">
+    <div className="flex flex-col items-center justify-center bg-gray-100">
+      {session?.status === "complete" ? (
         <div className="max-w-lg p-8 bg-white rounded-lg shadow-md text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,8 +54,10 @@ const Page = () => {
             Continue Shopping
           </Link>
         </div>
-      </div>
-    )
+      ) : (
+        <div>Payment Failed</div>
+      )}
+    </div>
   );
 };
 
