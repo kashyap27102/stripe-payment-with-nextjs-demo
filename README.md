@@ -80,7 +80,7 @@ Here in this project i have implemented three ways to integrate stripe checkout 
 
    `STRIPE_SECRET_KEY`
 
-   `DOMAIN` : http://localhost:3000
+   `NEXT_PUBLIC_DOMAIN` : http://localhost:3000
 
 - [Click here to get Keys.](https://dashboard.stripe.com/test/apikeys)
 
