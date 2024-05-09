@@ -6,6 +6,8 @@ Here in this project i have implemented three ways to integrate stripe checkout 
 - Embedded checkout page
 - Custom flow
 
+If you want to see the demo : [Live Link](https://stripe-payment-with-nextjs-demo.vercel.app/)
+
 ## Folder Structure
 
 ```
