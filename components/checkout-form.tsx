@@ -1,4 +1,3 @@
-
 import {
   AddressElement,
   LinkAuthenticationElement,
@@ -6,7 +5,6 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -15,6 +13,7 @@ export const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -23,6 +22,7 @@ export const CheckoutForm = () => {
       return;
     }
 
+    // get client secret from url
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );
@@ -34,8 +34,7 @@ export const CheckoutForm = () => {
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent!.status) {
         case "succeeded":
-          setMessage("Your payment is processing.");
-          // router.push('/custom-checkout/success')
+          router.push("/custom-checkout/success");
           break;
         case "processing":
           setMessage("Your payment is processing.");
@@ -50,7 +49,7 @@ export const CheckoutForm = () => {
     });
   }, [stripe]);
 
-
+  // Handler to confirm payment
   const onConfirmHandler = async (e: any) => {
     e.preventDefault();
 
@@ -65,26 +64,19 @@ export const CheckoutForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${process.env.DOMAIN}/custom-checkout`,
+        return_url: `${process.env.NEXT_PUBLIC_DOMAIN}/custom-checkout`,
       },
     });
+
     console.log(error);
-    
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.type);
-    } else {
-      setMessage("An unexpexted error occurred.");
-    }
-    
+    setMessage(error.type);
     setIsLoading(false);
   };
 
   return (
-    <form
-      onSubmit={onConfirmHandler}
-      className="flex  w-[600px] flex-col gap-4"
-    >
+    <form onSubmit={onConfirmHandler} className="flex w-[600px] flex-col gap-4">
       {/* Elements to collect details */}
+
       <LinkAuthenticationElement />
       <PaymentElement
         options={{
